@@ -18,7 +18,7 @@ if (isset($_POST['submit'])) {
     }
 
     if (empty($_POST['password'])) {
-        $passwordErr = "family name required";
+        $passwordErr = "password required";
     } else {
         $password = $_POST['password'];
     }
@@ -43,6 +43,11 @@ if (isset($_POST['submit'])) {
                 $_SESSION['lastname'] = $row['family_name'];
                 print_r($_SESSION);
                 header("location:welcome.php");
+            }else{
+                $_SESSION['userType'] = $row['user_type'];
+                $_SESSION['firstname'] = $row['first_name'];
+                $_SESSION['lastname'] = $row['family_name'];
+                header("location:superadmin.php");
             }
             mysqli_close($conn);
         }else{

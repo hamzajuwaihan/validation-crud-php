@@ -38,7 +38,7 @@ include "./includes/head.php";
 if ($_SESSION['userType'] == "user") {
     echo '<h1>' . 'Hi, ' .  $_SESSION['firstname'] . ' ' . $_SESSION['lastname'] . '<h1>';
 } else {
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users where user_type='user'";
     $result = mysqli_query($conn, $sql);
 
     echo "
