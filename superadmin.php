@@ -8,8 +8,8 @@ if (isset($_POST['logout'])) {
 }
 $sql = "SELECT COUNT(id) FROM users";
 $result = mysqli_query($conn, $sql);
-
-$num = mysqli_num_rows($result);
+$row = mysqli_fetch_array($result);
+$num = $row['COUNT(id)'];
 $sql = "SELECT SUM(salary) FROM users";
 $result = mysqli_query($conn, $sql);
 $row = mysqli_fetch_array($result);
