@@ -1,62 +1,16 @@
 <?php
 include "./includes/head.php";
 include "./includes/db_conn.php";
+include "./includes/login.php";
 ?>
 <?php
 session_start();
 
-$email = $password = null;
-$emailErr = $passwordErr = null;
-
 if (isset($_POST['submit'])) {
-    if (empty($_POST['email'])) {
-        $emailErr = "invalid email";
-    } else if (!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)) {
-        $emailErr = "invalid email";
-    } else {
-        $email = $_POST['email'];
-    }
-
-    if (empty($_POST['password'])) {
-        $passwordErr = "password required";
-    } else {
-        $password = $_POST['password'];
-    }
-
-    if (isset($email) && isset($password)) {
-        
-
-            $sql = "SELECT * FROM users WHERE email ='$email' AND password='$password'";
-            $result = mysqli_query($conn, $sql);
-            if (mysqli_num_rows($result) === 1) {
-            $row = mysqli_fetch_assoc($result);
-
-            if ($row['email'] === $email && $row['password'] === $password && $row['user_type'] == "user") {
-                $_SESSION['firstname'] = $row['first_name'];
-                $_SESSION['lastname'] = $row['family_name'];
-                $_SESSION['userType'] = $row['user_type'];
-                print_r($_SESSION);
-                header("location:welcome.php");
-            } else if ($row['email'] === $email && $row['password'] === $password && $row['user_type'] == "admin") {
-                $_SESSION['userType'] = $row['user_type'];
-                $_SESSION['firstname'] = $row['first_name'];
-                $_SESSION['lastname'] = $row['family_name'];
-                print_r($_SESSION);
-                header("location:welcome.php");
-            }else{
-                $_SESSION['userType'] = $row['user_type'];
-                $_SESSION['firstname'] = $row['first_name'];
-                $_SESSION['lastname'] = $row['family_name'];
-                header("location:superadmin.php");
-            }
-            mysqli_close($conn);
-        }else{
-            $emailErr = "wrong pass or email";
-        }
-    }
+    $attempt = new Login();
+    $attempt->loginValidation($_POST['email'],$_POST['password']);
 
 }
-
 
 ?>
 <div class="container mt-5">
@@ -84,6 +38,13 @@ if (isset($_POST['submit'])) {
                 <?php
                 if (isset($passwordErr)) {
                     echo "* " . $passwordErr;
+                }
+                ?>
+            </span>
+            <span class="error">
+                <?php
+                if (isset($attempt->emailErr)) {
+                    echo "* " . $attempt->emailErr;
                 }
                 ?>
             </span>
